@@ -19,20 +19,21 @@ def list_granules(source, granule_pattern=''):
     
     
 def granule_to_pods(granule_path, pod_root, level):
+    print(granule_path)
     granule_name = granule_path.split('/')[-1]
     try:
         ds = starepandas.read_granule(granule_path, latlon=True, sidecar=True)
     except ValueError:
         print('could not read {}'.format(granule_path))
         raise ValueError
-    if isinstance(ds, dict):    
+    if isinstance(ds, dict):
         for scan in ds:
             df = ds[scan]
             pod_name = scan + '.' + granule_name + '.pickle'
-            df.write_pods(pod_root, level, pod_name)            
+            df.write_pods(pod_root, level, pod_name)
     elif isinstance(ds, starepandas.STAREDataFrame):
         pod_name = granule_name + '.pickle'
-        ds.write_pods(pod_root, level, pod_name)            
+        ds.write_pods(pod_root, level, pod_name)
 
 
 if __name__ == '__main__':
